@@ -24,7 +24,9 @@ def iterate(times,e) :
 		y = uniform(-2, 2)
 	return record
 def ke(record,r) :
-	m,n = record.shape
+	m= record.shape[0]
+	if len(record.shape) == 1 :
+		record.shape = (m,1)
 	p = np.arange(m, dtype=np.float64)
 	p = p.flatten()
 	for i in range(m) :
@@ -36,10 +38,10 @@ def ke(record,r) :
 
 
 if __name__ == '__main__' :
-	e = list(range(100))
-	t = list(range(100))
+	e = list(range(10))
+	t = list(range(10))
 	r = 0.2
-	for i in range(100) :
+	for i in range(10) :
 		record = iterate(0,0.01*e[i])
 		Nxn1xnyn = deepcopy(record)
 		Nxn = deepcopy(record[:,1])
@@ -50,7 +52,8 @@ if __name__ == '__main__' :
 		pxnyn = ke(Nxnyn, r)
 		pxn1xn = ke(Nxn1xn, r)
 
-		t[i] = sum(pxn1xnyn*log2((pxn1xnyn*pxn)/(pxnyn*pxn1xn)))
+		t[i] = sum(pxn1xnyn*np.log2((pxn1xnyn*pxn)/(pxnyn*pxn1xn)))
 		e[i] = 0.01*e[i]
+		print("%s is done!"%i)
 	plt.plot(e,t,'r-*')
 	plt.show()
