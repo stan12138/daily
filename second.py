@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from random import uniform
 from math import log2,log
 from copy import deepcopy
-
+import time
 
 def func(x) :
 	return 2-x**2
@@ -42,16 +42,32 @@ if __name__ == '__main__' :
 	t = list(range(10))
 	r = 0.2
 	for i in range(10) :
+		now = time.time()
 		record = iterate(0,0.01*e[i])
+		
+		print("generate done , use %s seconds"%(time.time() - now))
+		now = time.time()
 		Nxn1xnyn = deepcopy(record)
 		Nxn = deepcopy(record[:,1])
 		Nxnyn = deepcopy(record[:,(1,2)])
 		Nxn1xn = deepcopy(record[:,(0,1)])
-		pxn1xnyn = ke(Nxn1xnyn, r)
-		pxn = ke(Nxn, r)
-		pxnyn = ke(Nxnyn, r)
-		pxn1xn = ke(Nxn1xn, r)
+		
+		print("copy done , use %s seconds"%(time.time() - now))
+		now = time.time()
 
+		pxn1xnyn = ke(Nxn1xnyn, r)
+
+		print("first kernel estimation done , use %s seconds"%(time.time() - now))
+		now = time.time()
+		pxn = ke(Nxn, r)
+		print("second kernel estimation done , use %s seconds"%(time.time() - now))
+		now = time.time()
+		pxnyn = ke(Nxnyn, r)
+		print("third kernel estimation done , use %s seconds"%(time.time() - now))
+		now = time.time()
+		pxn1xn = ke(Nxn1xn, r)
+		print("fourth kernel estimation done , use %s seconds"%(time.time() - now))
+		now = time.time()
 		t[i] = sum(pxn1xnyn*np.log2((pxn1xnyn*pxn)/(pxnyn*pxn1xn)))
 		e[i] = 0.01*e[i]
 		print("%s is done!"%i)
