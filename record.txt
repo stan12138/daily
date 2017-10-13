@@ -1,0 +1,77 @@
+fig = plt.figure()
+
+ax = fig.add_axes([0.2,0.2,0.6,0.6])
+
+text = fig.text(0.2,0.7,'hahaha',bbox={'pad':10,'facecolor':(0.8,1.0,1.0)})
+
+box = text.get_window_extent()
+
+boun = box.bounds
+
+boun
+Out[80]: (128.0, 330.89999999999992, 52.125, 14.0)
+
+rect = matplotlib.patches.Rectangle(boun[0:2],width=boun[2],height=boun[3],facecolor='red')
+
+ax.add_patch(rect)
+Out[82]: <matplotlib.patches.Rectangle at 0xd73789ff28>
+matplotlib.artist.getp(text)
+    agg_filter = None
+    alpha = None
+    animated = False
+    axes = None
+    bbox_patch = FancyBboxPatch(0,0;52.125x14)
+    children = []
+    clip_box = None
+    clip_on = True
+    clip_path = None
+    color = k
+    contains = None
+    family or fontfamily or fontname or name = ['sans-serif']
+    figure = Figure(640x477)
+    fontproperties or font_properties = :family=sans-serif:style=normal:variant=normal:wei...
+    gid = None
+    horizontalalignment or ha = left
+    label = 
+    name or fontname = DejaVu Sans
+    path_effects = []
+    picker = None
+    position = (0.2, 0.7)
+    prop_tup = (0.2, 0.7, 'hahaha', 'k', 'baseline', 'left', -912...
+    rasterized = None
+    rotation = 0.0
+    rotation_mode = None
+    size or fontsize = 10.0
+    sketch_params = None
+    snap = None
+    stretch or fontstretch = normal
+    style or fontstyle = normal
+    text = hahaha
+    transform = BboxTransformTo(TransformedBbox(Bbox([[0.0, 0.0], ...
+    transformed_clip_path_and_affine = (None, None)
+    unitless_position = (0.2, 0.7)
+    url = None
+    usetex = False
+    variant or fontvariant = normal
+    verticalalignment or ma or va = baseline
+    visible = True
+    weight or fontweight = 400
+    window_extent = Bbox(x0=128.0, y0=330.8999999999999, x1=180.125, y...
+    wrap = False
+    zorder = 3
+
+rect = matplotlib.patches.Rectangle([0,0],width=boun[2],height=boun[3],facecolor='red')
+
+ax.add_patch(rect)
+Out[85]: <matplotlib.patches.Rectangle at 0xd737ba6cc0>
+
+boun
+Out[86]: (128.0, 330.89999999999992, 52.125, 14.0)
+
+fig.set_size_inches(5,8)
+
+bbox = matplotlib.transforms.Bbox([[1.5,1.3],[4,6]])
+
+plt.savefig('wao.png',bbox_inches=bbox,dpi=400)
+
+plt.savefig('d:wao.png',bbox_inches=bbox,dpi=400)
