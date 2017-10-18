@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 17 18:05:10 2017
+Created on Wed Oct 18 15:15:42 2017
 
-@author: stan han
+@author: Stan
 """
 
 import glfw
@@ -27,35 +27,49 @@ def main() :
 		glfw.terminate()
 		return
 	glfw.make_context_current(window)
-	point = [-0.5, -0.5, 0.5, 0.0, 0.0,
-            0.5, -0.5, 0.5, 1.0, 0.0,
-            0.5, 0.5, 0.5, 1.0, 1.0,
-            -0.5, 0.5, 0.5, 0.0, 1.0,
+	point = [
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0,1.0,    
+        0.5, -0.5, 0.5, 1.0, 0.0,  0.0, 0.0, 1.0,   
+        0.5, 0.5, 0.5,  1.0, 1.0,   0.0, 0.0, 1.0,  
+        0.5, 0.5, 0.5,  1.0, 1.0,   0.0, 0.0, 1.0,  
+        -0.5, 0.5, 0.5,  0.0, 1.0,  0.0, 0.0, 1.0,  
+        -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 1.0,   
+        
 
-            -0.5, -0.5, -0.5, 0.0, 0.0,
-            0.5, -0.5, -0.5, 1.0, 0.0,
-            0.5, 0.5, -0.5, 1.0, 1.0,
-            -0.5, 0.5, -0.5, 0.0, 1.0,
+        -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0, 
+        -0.5, 0.5, -0.5,  0.0, 1.0,  0.0, 0.0, -1.0, 
+        0.5, 0.5, -0.5,   1.0, 1.0, 0.0, 0.0, -1.0, 
+        0.5, 0.5, -0.5,   1.0, 1.0, 0.0, 0.0, -1.0, 
+        0.5, -0.5, -0.5,  1.0, 0.0, 0.0, 0.0, -1.0, 
+        -0.5, -0.5, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0, 
 
-            0.5, -0.5, -0.5, 0.0, 0.0,
-            0.5, 0.5, -0.5, 1.0, 0.0,
-            0.5, 0.5, 0.5, 1.0, 1.0,
-            0.5, -0.5, 0.5, 0.0, 1.0,
+        -0.5, 0.5, 0.5, 0.0, 1.0,   -1.0, 0.0, 0.0, 
+        -0.5, 0.5, -0.5, 1.0, 1.0,   -1.0, 0.0, 0.0, 
+        -0.5, -0.5, -0.5, 1.0, 0.0, -1.0, 0.0, 0.0, 
+        -0.5, -0.5, -0.5,1.0, 0.0, -1.0, 0.0, 0.0,  
+        -0.5, -0.5, 0.5, 0.0, 0.0,  -1.0, 0.0, 0.0, 
+        -0.5, 0.5, 0.5, 0.0, 1.0,   -1.0, 0.0, 0.0, 
 
-            -0.5, 0.5, -0.5, 0.0, 0.0,
-            -0.5, -0.5, -0.5, 1.0, 0.0,
-            -0.5, -0.5, 0.5, 1.0, 1.0,
-            -0.5, 0.5, 0.5, 0.0, 1.0,
+        0.5, -0.5, -0.5,1.0, 0.0, 1.0, 0.0, 0.0, 
+        0.5, 0.5, -0.5,1.0, 1.0,  1.0, 0.0, 0.0, 
+        0.5, 0.5, 0.5,0.0, 1.0,   1.0, 0.0, 0.0, 
+        0.5, 0.5, 0.5,0.0, 1.0,   1.0, 0.0, 0.0, 
+        0.5, -0.5, 0.5,0.0, 0.0,  1.0, 0.0, 0.0, 
+        0.5, -0.5, -0.5,1.0, 0.0, 1.0, 0.0, 0.0, 
 
-            -0.5, -0.5, -0.5, 0.0, 0.0,
-            0.5, -0.5, -0.5, 1.0, 0.0,
-            0.5, -0.5, 0.5, 1.0, 1.0,
-            -0.5, -0.5, 0.5, 0.0, 1.0,
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 1.0, 0.0,    
+        -0.5, 0.5, -0.5, 0.0, 1.0, 0.0, 1.0, 0.0,    
+        -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0,    
+        -0.5, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0.0,    
+        0.5, 0.5, 0.5,  1.0, 0.0,  0.0, 1.0, 0.0,   
+        0.5, 0.5, -0.5, 1.0, 1.0, 0.0, 1.0, 0.0,    
 
-            0.5, 0.5, -0.5, 0.0, 0.0,
-            -0.5, 0.5, -0.5, 1.0, 0.0,
-            -0.5, 0.5, 0.5, 1.0, 1.0,
-            0.5, 0.5, 0.5, 0.0, 1.0]
+        -0.5, -0.5, 0.5,0.0, 0.0,  0.0, -1.0, 0.0,  
+        -0.5, -0.5, -0.5,0.0, 1.0, 0.0, -1.0, 0.0,  
+        0.5, -0.5, -0.5, 1.0, 1.0,  0.0, -1.0, 0.0, 
+        0.5, -0.5, -0.5, 1.0, 1.0,  0.0, -1.0, 0.0, 
+        0.5, -0.5, 0.5, 1.0, 0.0,   0.0, -1.0, 0.0, 
+        -0.5, -0.5, 0.5, 0.0, 0.0,  0.0, -1.0, 0.0]#顶点，纹理坐标，法向量
 	point = array(point,dtype=float32)
 	#point = array([-0.5,0.5,0,1,0,0,0,1,   0.5,0.5,0,0,1,0,1,1,  0.5,-0.5,0,0,0,1,1,0,  -0.5,-0.5,0,1,1,0,0,0],dtype=float32)
 	
@@ -71,10 +85,10 @@ def main() :
 	shader = My_shader('v.vs','f.frags')
 	shader.use()
 	
-	vb = pyrr.matrix44.create_from_y_rotation(radians(70))
+	vb = pyrr.matrix44.create_from_y_rotation(radians(-50))
 	
-	model = pyrr.matrix44.create_from_x_rotation(radians(-55))
-	view = pyrr.matrix44.create_from_translation(array([0,0,-6]))
+	model = pyrr.matrix44.create_from_x_rotation(radians(50))
+	view = pyrr.matrix44.create_from_translation(array([0,0,-4]))
 	projection = pyrr.matrix44.create_perspective_projection_matrix(45,1,0.1,100)
 	
 	
@@ -84,9 +98,11 @@ def main() :
 	glBindBuffer(GL_ARRAY_BUFFER,vbo)
 	glBufferData(GL_ARRAY_BUFFER,4*len(point),point,GL_STATIC_DRAW)
 	
+	'''
 	ebo = glGenBuffers(1)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,4*len(index),index,GL_STATIC_DRAW)
+	'''
 	
 	texture1 = glGenTextures(1)
 	
@@ -128,14 +144,14 @@ def main() :
 	
 
 	
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*4,ctypes.c_void_p(0))
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8*4,ctypes.c_void_p(0))
 	glEnableVertexAttribArray(0)
 	
-	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*4,ctypes.c_void_p(12))
+	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,8*4,ctypes.c_void_p(12))
 	glEnableVertexAttribArray(1)
 	
-	#glVertexAttribPointer(2,3,GL_FLOAT,GL_FALSE,8*4,ctypes.c_void_p(12))
-	#glEnableVertexAttribArray(2)
+	glVertexAttribPointer(2,3,GL_FLOAT,GL_FALSE,8*4,ctypes.c_void_p(20))
+	glEnableVertexAttribArray(2)
 	
 	
 	m_loc = glGetUniformLocation(shader.shader,'model')
@@ -151,22 +167,29 @@ def main() :
 	glUniformMatrix4fv(p_loc,1,GL_FALSE,projection)
 	
 	
-	
 	glUniform1i(glGetUniformLocation(shader.shader,'te'),0)
 	glUniform1i(glGetUniformLocation(shader.shader,'te1'),1)
 	
 	glClearColor(0.2,0.3,0.2,1.0)
 	glEnable(GL_DEPTH_TEST)
+	
+	#glUniform3f(glGetUniformLocation(shader.shader,'ocolor'),1.0,0.5,0.31)
+	#glUniform3f(glGetUniformLocation(shader.shader,'light'),1.0,1.0,1.0)
+	
+	shader.setvec3('ocolor',1.0,0.5,0.31)
+	shader.setvec3('light',1.0,1.0,1.0)
+	shader.setvec3('lightpos',4,4,0.5)
+	shader.setvec3('viewpos',0,0,4)
 	#glPolygonMode(GL_FRONT_AND_BACK,GL_LINE)
 	start = time()
 	while not glfw.window_should_close(window) :
 		glfw.poll_events()
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 		
-		model = pyrr.matrix44.create_from_x_rotation(radians((time()-start)*10))
+		#model = pyrr.matrix44.create_from_x_rotation(radians((time()-start)*10))
 		m_loc = glGetUniformLocation(shader.shader,'model')
 		glUniformMatrix4fv(m_loc,1,GL_FALSE,model)
-		glDrawElementsInstanced(GL_TRIANGLES, len(index), GL_UNSIGNED_INT, None, 125000)
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		glfw.swap_buffers(window)
 		
