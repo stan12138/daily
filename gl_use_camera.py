@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct 18 15:15:42 2017
+Created on Thu Oct 19 16:08:49 2017
 
 @author: Stan
 """
@@ -17,6 +17,35 @@ from math import radians
 from time import time
 from camera import Camera
 
+
+ctr = False
+left = False
+
+
+
+def key_handler(window,key,scancode,action,mode) :
+	#print(key,action)
+
+	if key == 341 and action == glfw.PRESS :
+		ca.set_ctr(True)
+	if key == 341 and action == glfw.RELEASE :
+		ca.set_ctr(False)
+def scroll_handler(window,xoffset,yoffset) :
+	ca.scroll(yoffset)
+	
+def mouse_button_handler(window,button,action,mods) :
+
+	if button == glfw.MOUSE_BUTTON_LEFT and action == glfw.PRESS :
+		ca.set_mouse_left(True)
+	elif  button == glfw.MOUSE_BUTTON_LEFT and action == glfw.RELEASE :
+		ca.set_mouse_left(False)
+		
+def mouse_move_handler(window,xpos,ypos) :
+	ca.mouse_loc(xpos,ypos)
+
+
+ca = Camera()
+
 def main() :
 	
 	
@@ -27,6 +56,17 @@ def main() :
 		glfw.terminate()
 		return
 	glfw.make_context_current(window)
+	
+	
+	glfw.set_key_callback(window,key_handler)
+	glfw.set_scroll_callback(window,scroll_handler)
+	glfw.set_mouse_button_callback(window,mouse_button_handler)
+	glfw.set_cursor_pos_callback(window,mouse_move_handler)
+	
+	
+	
+	
+	
 	point = [
         -0.5, -0.5, 0.5, 0.0, 0.0, 0.0, 0.0,1.0,    
         0.5, -0.5, 0.5, 1.0, 0.0,  0.0, 0.0, 1.0,   
@@ -89,7 +129,7 @@ def main() :
 	
 	model = pyrr.matrix44.create_from_x_rotation(radians(50))
 	view = pyrr.matrix44.create_from_translation(array([0,0,-4]))
-	projection = pyrr.matrix44.create_perspective_projection_matrix(45,1,0.1,100)
+	projection = pyrr.matrix44.create_perspective_projection_matrix(60,1,0.1,100)
 	
 	
 	
@@ -187,8 +227,8 @@ def main() :
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 		
 		#model = pyrr.matrix44.create_from_x_rotation(radians((time()-start)*10))
-		m_loc = glGetUniformLocation(shader.shader,'model')
-		glUniformMatrix4fv(m_loc,1,GL_FALSE,model)
+		v_loc = glGetUniformLocation(shader.shader,'view')
+		glUniformMatrix4fv(v_loc,1,GL_FALSE,ca.get_matrix())
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		glfw.swap_buffers(window)

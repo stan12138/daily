@@ -29,5 +29,9 @@ class My_shader:
     def use(self) :
         glUseProgram(self.shader)
 
+    def setvec3(self,name,a,b,c) :
+        loc = glGetUniformLocation(self.shader,name)
+        glUniform3f(loc,a,b,c)
+
 
      
