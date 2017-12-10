@@ -8,8 +8,8 @@ body{
 
 
 header{
-	background-image: url(../images/header.jpg);
-	height: 195px;
+	background-image: url(images/header.jpg);
+	height: 140px;
 }
 
 h1#title{
@@ -74,64 +74,7 @@ a{
 	font-weight: 1000;
 }
 
-article.article-one{
-	margin-bottom: 35px;
-	position: relative;
-	
-	/*height: 60%;*/
-	background-color: white;
-	
-	padding: 35px;
-	width: 630px;
-	border-radius: 3px;
-	left: 50%;
-	transform: translateX(-50%);
-}
 
-div.article-head{
-	position: relative;
-	text-align: center;
-}
-
-
-h1.article-title{
-	position: relative;
-	top: 20%;
-	margin: 15px;
-	display: inline-block;
-	/*
-	left: 50%;
-	transform: translateX(-50%);*/
-
-}
-
-.article-info{
-	position: relative;
-	
-	display: inline-block;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	/*
-	transform: translateX(-50%);
-	left: 50%;*/
-	text-align: center;
-}
-
-div.article-content{
-	text-align: left;
-	margin-bottom: 1.46em;
-}
-
-a.article-watch{
-	background-color: #f4645f;
-	border: 1px solid #f4645f;
-	padding-top: 7px;
-	padding-bottom: 7px;
-	padding-right: 14px;
-	padding-left: 14px;
-	color: white;
-	border-radius: 2px;
-}
 
 nav.page-tail{
 	position: relative;
@@ -216,4 +159,42 @@ div.aside-content{
 	padding-bottom: 21px;
 	margin-bottom: 35px;
 	background-color: white;
+}
+
+
+#editor{
+	position: relative;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 500px;
+	border-radius: 10px;
+	border: 1px solid gray;
+	box-shadow:-3px 3px 15px #6B6B6B;
+	font-size: 130%;
+}
+
+
+
+
+
+
+#mode{
+	border-radius: 3px;
+}
+
+#theme{
+	border-radius: 3px;
+	width: 100%;
+}
+
+input#name{
+	border-radius: 3px;
+	width: 100%;
+}
+
+button#submit{
+	border-radius: 3px;
+	margin-top: 7px;
 }
