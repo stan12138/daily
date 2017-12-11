@@ -1,21 +1,44 @@
 <!DOCTYPE html>
-<html lang="zh">
-	<head>
-        <meta charset="utf-8" />
-        <title>Simple example - Editor.md examples</title>
-        <style>
-            #test-editormd li{
-                list-style:disc;
-            }
-        </style>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name='viewport' content="width=device-width,initial-scal=1">
+        <title>test Bootstrap</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{url_for('static',filename='md_editor/editormd.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='md_editor/md_editor_edit.css')}}">
     </head>
 
     <body>
-        <div id="test-editormd">
-	        <textarea style="display:none;"></textarea>
-	        <textarea class="editormd-html-textarea" name="text"></textarea>
-	    </div>
+        <header class="main-header">
+            <h1 id="title">THIS IS TEST PAGE</h1>
+            <a href="/" class="home">首页</a>         
+        </header>
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-li"><a href="/code-editor">代码编辑器</a></li>
+                <li class="nav-li"><a href="/md-editor/edit">Blog 编辑</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>               
+            </ul>           
+        </nav>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <main class="col-md-12">
+                        <div id="test-editormd">
+                            <textarea style="display:none;"></textarea>
+                            <textarea class="editormd-html-textarea" name="text"></textarea>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <p>Design By Stan</p>
+        </footer>
 
 	    <script src="{{url_for('static',filename='md_editor/jquery.min.js')}}"></script>
 		<script src="{{url_for('static',filename='md_editor/stan_editor_test.js')}}"></script>
@@ -29,10 +52,7 @@
         <script src="{{url_for('static',filename='md_editor/editormd.js')}}"></script>
         <div id="content" class="contenttext">
             <textarea style="display:none;" name="editormd-markdown-doc" id="content"></textarea>
-
         </div>
-        </div>
-
         <script type="text/javascript">
             $(document).ready(function() {
                 editormd.markdownToHTML("content", {
@@ -49,7 +69,6 @@
 
             })
         </script>
-
 	</body>
 
 </html>

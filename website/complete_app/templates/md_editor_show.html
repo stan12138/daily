@@ -1,92 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
     <head>
-        <meta charset="utf-8" />
-        <title>HTML Preview(markdown to html) - Editor.md examples</title>
+        <meta charset="utf-8">
+        <meta name='viewport' content="width=device-width,initial-scal=1">
+        <title>test Bootstrap</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='md_editor/editormd.min.css')}}" />
         <link rel="stylesheet" href="{{url_for('static',filename='md_editor/style.css')}}" />
         <link rel="stylesheet" href="{{url_for('static',filename='md_editor/editormd.preview.css')}}" />
-        <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
-        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='md_editor/myself.css')}}">
-        <style>            
-            .editormd-html-preview {
-                width: 90%;
-                margin: 0 auto;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='md_editor/md_editor_show.css')}}">
     </head>
+
     <body>
-        <div id="layout">
-            <header>
-                <h1>Markdown转HTML的显示处理</h1> 
-                <p>即：非编辑情况下的HTML预览</p>
-                <p>HTML Preview(markdown to html)</p>       
-            </header>
-            <div class="btns">
-                <button onclick="location.href='./html-preview-markdown-to-html-custom-toc-container.html';">将 ToC 移到自定义容器层</button>
+        <header class="main-header">
+            <h1 id="title">THIS IS TEST PAGE</h1>
+            <a href="/" class="home">首页</a>         
+        </header>
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-li"><a href="/code-editor">代码编辑器</a></li>
+                <li class="nav-li"><a href="/md-editor/edit">Blog 编辑</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>               
+            </ul>           
+        </nav>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <main class="col-md-12">
+                        <div id="test-editormd-view">
+                           <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>               
+                        </div>
+                    </main>
+                </div>
             </div>
-            <div id="test-editormd-view">
-               <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>               
-            </div>
-            <div id="test-editormd-view2">
-                <textarea id="append-test" style="display:none;">
+        </section>
+        <footer>
+            <p>Design By Stan</p>
+        </footer>                    
 
-###科学公式 TeX(KaTeX)
-                    
-$$E=mc^2$$
 
-行内的公式$$E=mc^2$$行内的公式，行内的$$E=mc^2$$公式。
-
-$$\(\sqrt{3x-1}+(1+x)^2\)$$
-                    
-$$\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))$$
-
-$$X^2 > Y$$
-
-#####上标和下标
-
-上标：X&lt;sup&gt;2&lt;/sup&gt;
-
-下标：O&lt;sub&gt;2&lt;/sub&gt;
-
-##### 代码块里包含的过滤标签及属性不会被过滤
-
-```html
-&lt;style type="text/style"&gt;
-body{background:red;}
-&lt;/style&gt;
-
-&lt;script type="text/javscript"&gt;
-alert("script");
-&lt;/script&gt;
-
-&lt;iframe height=498 width=510 src="http://player.youku.com/embed/XMzA0MzIwMDgw" frameborder=0 allowfullscreen&gt;&lt;/iframe&gt;
-```
-
-#####Style
-
-&lt;style&gt;
-body{background:red;}
-&lt;/style&gt;
-
-&lt;style type="text/style"&gt;
-body{background:red;}
-&lt;/style&gt;
-
-#####Script
-
-&lt;script&gt;
-alert("script");
-&lt;/script&gt;
-
-&lt;script type="text/javscript"&gt;
-alert("script");
-&lt;/script&gt;</textarea>          
-            </div>
-        </div>
-        <!-- <script src="js/zepto.min.js"></script>
-        <script>        
-            var jQuery = Zepto;  // 为了避免修改flowChart.js和sequence-diagram.js的源码，所以使用Zepto.js时想支持flowChart/sequenceDiagram就得加上这一句
-        </script> -->
         <script src="{{url_for('static',filename='md_editor/jquery.min.js')}}"></script>
         <script src="{{url_for('static',filename='md_editor/marked.min.js')}}"></script>
         <script src="{{url_for('static',filename='md_editor/prettify.min.js')}}"></script>

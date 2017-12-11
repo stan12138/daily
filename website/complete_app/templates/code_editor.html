@@ -1,96 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>ACE in Action</title>
-        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='code_editor/code_editor.css')}}">
-        <!--script type="text/javascript" src="{{url_for('static',filename='code_editor/code_editor.js')}}"></script-->
-    </head>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name='viewport' content="width=device-width,initial-scal=1">
+		<title>test Bootstrap</title>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='code_editor/code_editor.css')}}">
+	</head>
 
-    <body>
-        <header>
-            <h1>THIS IS TEST PAGE</h1>
-            <a href="effeff" class="home">首页</a>
-        </header>
+	<body>
+		<header class="main-header">
+			<h1 id="title">THIS IS TEST PAGE</h1>
+			<a href="/" class="home">首页</a>			
+		</header>
+		<nav class="main-nav">
+			<ul class="nav-list">
+				<li class="nav-li"><a href="/code-editor">代码编辑器</a></li>
+				<li class="nav-li"><a href="/md-editor/edit">Blog 编辑</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>				
+			</ul>			
+		</nav>
+		<section>
+			<div class="container">
+				<div class="row">
+					<main class="col-xs-9 col-md-9 col-sm-9">
+						<div id="editor" class="shadow"></div>
+					</main>
+					<aside class="col-xs-9 col-md-3 col-sm-9">
+						<div class="aside-content">
+							<h4>User</h4>
+							<div>未登录</div>
+							<h4>Login in</h4>
+						</div>
 
+						<div class="aside-content">
+							<h4>Language</h4>
+				            <select id="mode">
+				                <option value="ace/mode/javascript">JavaScript</option>
+				                <option value="ace/mode/c_cpp">C and C++</option>
+				                <option value="ace/mode/css">CSS</option>
+				                <option value="ace/mode/html">HTML</option>
+				                <option value="ace/mode/java">Java</option>
+				                <option value="ace/mode/latex">LaTeX</option>
+				                <option value="ace/mode/markdown">Markdown</option>
+				                <option value="ace/mode/matlab">MATLAB</option>
+				                <option value="ace/mode/python">Python</option>
+				                <option value="ace/mode/swift">Swift</option>
+				                <option value="ace/mode/text">Text</option>
+				            </select>
 
-        <div class="form-head">
-            <form id="form1">
-                <div class="form-text">input filename</div>
-                <input name="filename" id="name">
-                <textarea name="content" id="content" hidden></textarea>
-                <button>Submit</button>
-            </form>
-        </div>
+							<h4>Theme</h4>
+				            <select id="theme"> 
+				                <optgroup label="Bright">
+				                    <option value="ace/theme/chrome">Chrome</option>
+				                    <option value="ace/theme/clouds">Clouds</option>
+				                    <option value="ace/theme/crimson_editor">Crimson Editor</option>
+				                    <option value="ace/theme/dawn">Dawn</option>
+				                    <option value="ace/theme/dreamweaver">Dreamweaver</option>
+				                    <option value="ace/theme/eclipse">Eclipse</option>
+				                    <option value="ace/theme/github">GitHub</option>
+				                    <option value="ace/theme/iplastic">IPlastic</option>
+				                    <option value="ace/theme/solarized_light">Solarized Light</option>
+				                    <option value="ace/theme/textmate">TextMate</option>
+				                    <option value="ace/theme/tomorrow">Tomorrow</option>
+				                    <option value="ace/theme/xcode">XCode</option>
+				                    <option value="ace/theme/kuroir">Kuroir</option>
+				                    <option value="ace/theme/katzenmilch">KatzenMilch</option>
+				                    <option value="ace/theme/sqlserver">SQL Server</option>
+				                </optgroup>
 
-        <aside>
-            <select id="mode">
-                <option value="ace/mode/javascript">JavaScript</option>
-                <option value="ace/mode/c_cpp">C and C++</option>
-                <option value="ace/mode/css">CSS</option>
-                <option value="ace/mode/glsl">Glsl</option>
-                <option value="ace/mode/html">HTML</option>
-                <option value="ace/mode/java">Java</option>
-                <option value="ace/mode/json">JSON</option>
-                <option value="ace/mode/latex">LaTeX</option>
-                <option value="ace/mode/markdown">Markdown</option>
-                <option value="ace/mode/matlab">MATLAB</option>
-                <option value="ace/mode/mysql">MySQL</option>
-                <option value="ace/mode/python">Python</option>
-                <option value="ace/mode/swift">Swift</option>
-                <option value="ace/mode/text">Text</option>
-            </select>
+				                <optgroup label="Dark">
+				                    <option value="ace/theme/ambiance">Ambiance</option>
+				                    <option value="ace/theme/chaos">Chaos</option>
+				                    <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
+				                    <option value="ace/theme/cobalt">Cobalt</option>
+				                    <option value="ace/theme/gruvbox">Gruvbox</option>
+				                    <option value="ace/theme/gob">Green on Black</option>
+				                    <option value="ace/theme/idle_fingers">idle Fingers</option>
+				                    <option value="ace/theme/kr_theme">krTheme</option>
+				                    <option value="ace/theme/merbivore">Merbivore</option>
+				                    <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
+				                    <option value="ace/theme/mono_industrial">Mono Industrial</option>
+				                    <option value="ace/theme/monokai">Monokai</option>
+				                    <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
+				                    <option value="ace/theme/solarized_dark">Solarized Dark</option>
+				                    <option value="ace/theme/terminal">Terminal</option>
+				                    <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
+				                    <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
+				                    <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
+				                    <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
+				                    <option value="ace/theme/twilight">Twilight</option>
+				                    <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
+				                </optgroup>
+				            </select>
 
+				            <h4>Font Size</h4>
+				            <div class="font-size">
+					            <input type="range" id="font-size" min="50" max="250" />
+					            <input id="show-size" value="100" disabled />
+				            </div>
+						</div>
 
-            <select id="theme"> 
-                <optgroup label="Bright">
-                    <option value="ace/theme/chrome">Chrome</option>
-                    <option value="ace/theme/clouds">Clouds</option>
-                    <option value="ace/theme/crimson_editor">Crimson Editor</option>
-                    <option value="ace/theme/dawn">Dawn</option>
-                    <option value="ace/theme/dreamweaver">Dreamweaver</option>
-                    <option value="ace/theme/eclipse">Eclipse</option>
-                    <option value="ace/theme/github">GitHub</option>
-                    <option value="ace/theme/iplastic">IPlastic</option>
-                    <option value="ace/theme/solarized_light">Solarized Light</option>
-                    <option value="ace/theme/textmate">TextMate</option>
-                    <option value="ace/theme/tomorrow">Tomorrow</option>
-                    <option value="ace/theme/xcode">XCode</option>
-                    <option value="ace/theme/kuroir">Kuroir</option>
-                    <option value="ace/theme/katzenmilch">KatzenMilch</option>
-                    <option value="ace/theme/sqlserver">SQL Server</option>
-                </optgroup>
+						<div class="aside-content">
+							<h4>File Name</h4>
+							<div>
+								<input id="name" name="name"/> <input id="suffix" value=".js" disabled />
+							</div>
+							<form id="form" method="post" action="/save_code">
+								<textarea name="content" id="content" hidden></textarea>
+								<input type="text" name="filename" id="filename" hidden>
+							</form>
+							<button id="submit">Submit</button>
+							<h4>保存到本地</h4>
+							<button id="save-local">Save</button>
+						</div>
 
-                <optgroup label="Dark">
-                    <option value="ace/theme/ambiance">Ambiance</option>
-                    <option value="ace/theme/chaos">Chaos</option>
-                    <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
-                    <option value="ace/theme/cobalt">Cobalt</option>
-                    <option value="ace/theme/gruvbox">Gruvbox</option>
-                    <option value="ace/theme/gob">Green on Black</option>
-                    <option value="ace/theme/idle_fingers">idle Fingers</option>
-                    <option value="ace/theme/kr_theme">krTheme</option>
-                    <option value="ace/theme/merbivore">Merbivore</option>
-                    <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
-                    <option value="ace/theme/mono_industrial">Mono Industrial</option>
-                    <option value="ace/theme/monokai">Monokai</option>
-                    <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
-                    <option value="ace/theme/solarized_dark">Solarized Dark</option>
-                    <option value="ace/theme/terminal">Terminal</option>
-                    <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
-                    <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
-                    <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
-                    <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
-                    <option value="ace/theme/twilight">Twilight</option>
-                    <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
-                </optgroup>
-            </select>
+					</aside>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<p>Design By Stan</p>
+		</footer>
 
-        </aside>
-
-        <div id="editor"></div>
-        <script src="{{url_for('static',filename='code_editor/src-min-noconflict/ace.js')}}" type="text/javascript" charset="utf-8"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='code_editor/code_editor.js')}}"></script>
-
-
-    </body>
-</html>
+		<script type="text/javascript" src="{{url_for('static',filename='code_editor/src-min-noconflict/ace.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static',filename='code_editor/code_editor.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static',filename='code_editor/FileSaver.min.js')}}"></script>
+	</body>
+</html>						
