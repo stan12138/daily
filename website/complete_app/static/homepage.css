@@ -1,8 +1,13 @@
+html{
+	height: 100%;
+}
+
 body{
 	position: relative;
 	padding: 0;
 	margin: 0;
 	background: #ededed;
+	min-height: 100%;
 }
 
 
@@ -196,10 +201,12 @@ footer{
 	padding-bottom: 0px;
 	padding-top: 0px;
 	background-color: #202020;
-	height: auto;
+	height: 40px;
 	width: 100%;
 	box-sizing: border-box;
 	color: white;
+	position: absolute;
+	bottom: 0;
 }
 
 footer>p{
