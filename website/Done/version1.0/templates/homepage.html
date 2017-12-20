@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name='viewport' content="width=device-width,initial-scal=1">
+		<title>test Bootstrap</title>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='homepage.css')}}">
+		<script type="text/javascript" src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+		
+	</head>
+
+	<body>
+		<header class="main-header">
+			<h1 id="title">THIS IS TEST PAGE</h1>
+			<a href="/" class="home">首页</a>			
+		</header>
+		<nav class="main-nav">
+			<ul class="nav-list">
+				<li class="nav-li"><a href="/code-editor">代码编辑器</a></li>
+				<li class="nav-li"><a href="/md-editor/edit">Blog 编辑</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>				
+			</ul>			
+		</nav>
+		<section>
+			<div class="container">
+				<div class="row">
+					<main class="col-md-8">
+						{% for article in articles %}
+						<article class="article-one">
+							<div class="article-head">
+								<div><h1 class="article-title">{{ article[0] }}</h1></div>
+								<div class="article-info">
+									<span>作者：{{ article[1] }}  </span>
+									<time>{{ article[2] }}</time>
+								</div>
+							</div>
+							<div class="article-content">
+								<p>{{ article[3] }}</p>
+							</div>
+							<div>
+								<a class="article-watch" href="/md-editor/show/{{ article[4] }}">阅读全文</a>
+							</div>						
+						</article>
+						{% endfor %}
+
+						<nav class="page-tail">
+							{% if pagenum>1 %}
+							<a href="/home/{{ pagenum-1 }}" class="last-nav1"><span id="logo1" class="glyphicon glyphicon-chevron-left"></span></a>
+							{% endif %}
+							<div class="last-nav"><span class="page">第{{ pagenum }}页 / 共{{ allnum }}页</span></div>
+							{% if pagenum < allnum %}
+							<a href="/home/{{ pagenum+1 }}" class="last-nav2"><span id="logo2" class="glyphicon glyphicon-chevron-right"></span></a>
+							{% endif %}
+						</nav>
+					</main>
+					<aside class="col-md-4">
+						<div class="aside-content" id="login-part">
+							{% if user=='stranger' %}
+								<h4>Login State</h4>
+								{% for message in flash_messages %}
+	                            <div class="alert alert-{{ message[0] }}">
+	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	                            	{{ message[1] }}
+	                            </div>
+	                        	{% endfor %}							
+								<div id="state">Hello, {{ user }}</div>
+	                            <form method="post" id="login-form">
+	                                <h4>Login in</h4>
+	                                <p class="form-text">User name</p>
+	                                <p><input class='side-form form-box' type="text" name="user" id="user"></p>
+	                                <p class="form-text">Password</p>
+	                                <p><input class='side-form form-box' type="password" name="password" id="password"></p>
+	                                <input type="button" class='side-form-button' id="login-button" value='提交'/>
+	                            </form>
+	                        {% else %}
+								<h4>Login State</h4>
+								{% for message in flash_messages %}
+	                            <div class="alert alert-{{ message[0] }}">
+	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	                            	{{ message[1] }}
+	                            </div>
+	                        	{% endfor %}						
+								<div id="state">Hello, {{ user }}</div>
+	                            <br/>
+	                            <input type="button" class='side-form-button' id="logout-button" value='退出'/>
+	                        {% endif %}
+						</div>
+
+						<div class="aside-content">
+							<h4>Function</h4>
+							<div><a href="">代码编辑器</a></div>
+							<div><a href="">写博客</a></div>
+							<div><a href="">地图接口</a></div>
+						</div>
+
+						<div class="aside-content">
+							<h4>文章列表</h4>
+							{% for info in side_article_info %}
+							<div><a href="/md-editor/show/{{ info[1] }}">{{ info[0] }}</a></div>
+							{% endfor %}
+						</div>
+					</aside>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<p>Design By Stan</p>
+		</footer>
+
+		<script type="text/javascript">
+			if(window.screen.width<=480)
+			{
+				alert("屏幕尺寸太小，效果极其糟糕，请使用宽度大于768的设备");
+			}
+			else if(window.screen.width<=769)
+			{
+				alert("屏幕尺寸较小，效果不佳，建议使用宽度大于768的设备");
+			}
+		</script>
+		<script type="text/javascript" src="{{url_for('static',filename='homepage.js')}}"></script>
+	</body>
+</html>

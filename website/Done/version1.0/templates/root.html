@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name='viewport' content="width=device-width,initial-scal=1">
+		<title>Root</title>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+	</head>
+
+	<body>
+		<section>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 main-content">
+						<p>所有用户</p>
+						<table class="table table-striped table-bordered table-hover">
+							<tr>
+								<td>User Name</td>
+								<td>Password</td>
+								<td>Authority</td>
+								<td>Authority Mean</td>
+							</tr>
+							{% for line in user %}
+							<tr>
+								<td>{{ line[0] }}</td>
+								<td>{{ line[1] }}</td>
+								<td>{{ line[2] }}</td>
+								{% if line[2]==1 %}
+								<td>最高权限</td>
+								{% else %}
+								<td>普通用户</td>
+								{% endif %}
+							</tr>
+							{% endfor %}
+						</table>
+
+						<p>所有Blog</p>
+						<table class="table table-striped table-bordered table-hover">
+							<tr>
+								<td>Title</td>
+								<td>Auth</td>
+								<td>Date</td>
+							</tr>
+							{% for line in blog %}
+							<tr>
+								<td>{{ line[1] }}</td>
+								<td>{{ line[2] }}</td>
+								<td>{{ line[3] }}</td>
+							</tr>
+							{% endfor %}
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>

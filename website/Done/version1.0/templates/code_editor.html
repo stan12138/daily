@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name='viewport' content="width=device-width,initial-scal=1">
+		<title>test Bootstrap</title>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='code_editor/code_editor.css')}}">
+		<script type="text/javascript" src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+	</head>
+
+	<body>
+		<header class="main-header">
+			<h1 id="title">THIS IS TEST PAGE</h1>
+			<a href="/" class="home">首页</a>			
+		</header>
+		<nav class="main-nav">
+			<ul class="nav-list">
+				<li class="nav-li"><a href="/code-editor">代码编辑器</a></li>
+				<li class="nav-li"><a href="/md-editor/edit">Blog 编辑</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>
+				<li class="nav-li"><a href="">待定</a></li>				
+			</ul>			
+		</nav>
+		<section>
+			<div class="container">
+				<div class="row">
+					<main class="col-xs-9 col-md-9 col-sm-9">
+						<div id="editor" class="shadow"></div>
+					</main>
+					<aside class="col-xs-3 col-md-3 col-sm-3">
+						<div class="aside-content" id="login-part">
+							{% if user=='stranger' %}
+								<h4>Login State</h4>
+								{% for message in flash_messages %}
+	                            <div class="alert alert-{{ message[0] }}">
+	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	                            	{{ message[1] }}
+	                            </div>
+	                        	{% endfor %}							
+								<div id="state">Hello, {{ user }}</div>
+	                            <form method="post" id="login-form">
+	                                <h4>Login in</h4>
+	                                <p class="form-text">User name</p>
+	                                <p><input class='side-form form-box' type="text" name="user" id="user"></p>
+	                                <p class="form-text">Password</p>
+	                                <p><input class='side-form form-box' type="password" name="password" id="password"></p>
+	                                <input type="button" class='side-form-button' id="login-button" value='提交'/>
+	                            </form>
+	                        {% else %}
+								<h4>Login State</h4>
+								{% for message in flash_messages %}
+	                            <div class="alert alert-{{ message[0] }}">
+	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	                            	{{ message[1] }}
+	                            </div>
+	                        	{% endfor %}						
+								<div id="state">Hello, {{ user }}</div>
+	                            <br/>
+	                            <input type="button" class='side-form-button' id="logout-button" value='退出'/>
+	                        {% endif %}
+						</div>
+
+
+						<div class="aside-content">
+							<h4>Font Size</h4>
+				            <select id="font-size">
+				                <option value=50%>50%</option>
+				                <option value=75%>75%</option>
+				                <option value=100% selected="selected">100%</option>
+				                <option value=125%>125%</option>
+				                <option value=150%>150%</option>
+				            </select>
+
+							<h4>Language</h4>
+				            <select id="mode">
+				                <option value="ace/mode/javascript">JavaScript</option>
+				                <option value="ace/mode/c_cpp">C and C++</option>
+				                <option value="ace/mode/css">CSS</option>
+				                <option value="ace/mode/html">HTML</option>
+				                <option value="ace/mode/java">Java</option>
+				                <option value="ace/mode/latex">LaTeX</option>
+				                <option value="ace/mode/markdown">Markdown</option>
+				                <option value="ace/mode/matlab">MATLAB</option>
+				                <option value="ace/mode/python">Python</option>
+				                <option value="ace/mode/swift">Swift</option>
+				                <option value="ace/mode/text">Text</option>
+				            </select>
+
+							<h4>Theme</h4>
+				            <select id="theme"> 
+				                <optgroup label="Bright">
+				                    <option value="ace/theme/chrome">Chrome</option>
+				                    <option value="ace/theme/clouds">Clouds</option>
+				                    <option value="ace/theme/crimson_editor">Crimson Editor</option>
+				                    <option value="ace/theme/dawn">Dawn</option>
+				                    <option value="ace/theme/dreamweaver">Dreamweaver</option>
+				                    <option value="ace/theme/eclipse">Eclipse</option>
+				                    <option value="ace/theme/github">GitHub</option>
+				                    <option value="ace/theme/iplastic">IPlastic</option>
+				                    <option value="ace/theme/solarized_light">Solarized Light</option>
+				                    <option value="ace/theme/textmate">TextMate</option>
+				                    <option value="ace/theme/tomorrow">Tomorrow</option>
+				                    <option value="ace/theme/xcode">XCode</option>
+				                    <option value="ace/theme/kuroir">Kuroir</option>
+				                    <option value="ace/theme/katzenmilch">KatzenMilch</option>
+				                    <option value="ace/theme/sqlserver">SQL Server</option>
+				                </optgroup>
+
+				                <optgroup label="Dark">
+				                    <option value="ace/theme/ambiance">Ambiance</option>
+				                    <option value="ace/theme/chaos">Chaos</option>
+				                    <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
+				                    <option value="ace/theme/cobalt">Cobalt</option>
+				                    <option value="ace/theme/gruvbox">Gruvbox</option>
+				                    <option value="ace/theme/gob">Green on Black</option>
+				                    <option value="ace/theme/idle_fingers">idle Fingers</option>
+				                    <option value="ace/theme/kr_theme">krTheme</option>
+				                    <option value="ace/theme/merbivore">Merbivore</option>
+				                    <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
+				                    <option value="ace/theme/mono_industrial">Mono Industrial</option>
+				                    <option value="ace/theme/monokai">Monokai</option>
+				                    <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
+				                    <option value="ace/theme/solarized_dark">Solarized Dark</option>
+				                    <option value="ace/theme/terminal">Terminal</option>
+				                    <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
+				                    <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
+				                    <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
+				                    <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
+				                    <option value="ace/theme/twilight">Twilight</option>
+				                    <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
+				                </optgroup>
+				            </select>
+						</div>
+
+						<div class="aside-content">
+							<h4>File Name</h4>
+							<div>
+								<input id="name" name="name"/> <input id="suffix" value=".js" disabled />
+							</div>
+							<form id="form" method="post" action="/save_code">
+								<textarea name="content" id="content" hidden></textarea>
+								<input type="text" name="filename" id="filename" hidden>
+							</form>
+							<button id="submit">Submit</button>
+							<h4>保存到本地</h4>
+							<button id="save-local">Save</button>
+						</div>
+
+					</aside>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<p>Design By Stan</p>
+		</footer>
+
+		<script type="text/javascript" src="{{url_for('static',filename='code_editor/src-min-noconflict/ace.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static',filename='code_editor/code_editor.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static',filename='code_editor/FileSaver.min.js')}}"></script>
+		<script type="text/javascript">
+			if(window.screen.width<=480)
+			{
+				alert("屏幕尺寸太小，效果极其糟糕，请使用宽度大于768的设备");
+			}
+			else if(window.screen.width<=769)
+			{
+				alert("屏幕尺寸较小，效果不佳，建议使用宽度大于768的设备");
+			}
+		</script>
+
+
+		
+	</body>
+</html>						
