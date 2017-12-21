@@ -1,0 +1,37 @@
+button{
+	border-radius: 5px;
+	border: 1px solid #dc143c;
+	background-color: #dc143c;
+	color: white;
+	font-weight: 600;
+}
+
+button.upgrade{
+	border-radius: 5px;
+	border: 1px solid #4CAF50;
+	background-color: #4CAF50;
+	color: white;
+	font-weight: 600;
+}
+
+input{
+	border-radius: 5px;
+	border: 1px solid grey;
+}
+
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover{
+	text-decoration:none;
+	color: #f4645f;
+}
+
+a#home{
+	font-weight: 600;
+}
+a#home:link {text-decoration:none;}
+a#home:visited {text-decoration:none;}
+a#home:hover{
+	text-decoration:none;
+	color: #f4645f;
+}

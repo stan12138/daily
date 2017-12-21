@@ -333,3 +333,7 @@ input#logout-button{
 h4{
 	margin-bottom: 5px;
 }
+
+input#register-button{
+	margin-left: 20px;
+}

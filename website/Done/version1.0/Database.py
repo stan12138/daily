@@ -72,7 +72,15 @@ class Database :
 	def delete_user(self, name) :
 		self.database.execute("delete from user where name='%s';"%name)
 		self.database.commit()
-	
+
+	def change_user_password(self, name, password) :
+		self.database.execute("update user set password='%s' where name='%s';"%(password,name))
+		self.database.commit()
+
+	def change_user_authority(self,name,authority) :
+		self.database.execute("update user set authority='%s' where name='%s';"%(authority,name))
+		self.database.commit()
+
 	def check_user(self, name, password, name_only=False) :
 		res = list(self.database.execute('select * from user where name="%s";'%name))
 		get = False
