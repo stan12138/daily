@@ -187,3 +187,34 @@ div.aside-content{
 	margin-bottom: 35px;
 	background-color: white;
 }
+
+
+div#flash-area{
+	display: inline-block;
+	float: left;
+	width: 40%;
+}
+
+input#reedit-submit{
+	display: inline-block;
+	float: right;
+	border-radius: 5px;
+	border: 1px solid #dc143c;
+	background-color: #dc143c;
+	color: white;
+	font-weight: 600;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+p.has-error{
+	color: #b94a48;
+}
+input.has-error{
+	border:1px solid #b94a48;
+}
+
+div.alert{
+	padding: 5px;
+	margin-bottom: 10px;
+}

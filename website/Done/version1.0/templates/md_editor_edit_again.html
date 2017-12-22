@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name='viewport' content="width=device-width,initial-scal=1">
+        <title>test Bootstrap</title>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='md_editor/editormd.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='md_editor/md_editor_edit.css')}}">
+        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>        
+    </head>
+
+    <body>
+        <header class="main-header">
+            <h1 id="title">THIS IS TEST PAGE</h1>
+            <a href="/" class="home">首页</a>         
+        </header>
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-li"><a href="/code-editor">代码编辑器</a></li>
+                <li class="nav-li"><a href="/md-editor/edit">Blog 编辑</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>
+                <li class="nav-li"><a href="">待定</a></li>               
+            </ul>           
+        </nav>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <main class="col-xs-9 col-md-9 col-sm-9">
+                        <div id="test-editormd">
+                            <textarea class="editormd-markdown-textarea" placeholder="Enjoy Markdown! coding now..." name="test-editormd-markdown-doc" style="display: none;">{{md_content}}</textarea>
+                            <textarea class="editormd-html-textarea" name="text"></textarea>
+                        </div>
+                    </main>
+
+                    <aside class="col-xs-3 col-md-3 col-sm-3">
+                        <div class="aside-content" id="login-part">
+                            {% if user=='stranger' %}
+                                <h4>Login State</h4>
+                                {% for message in flash_messages %}
+                                <div class="alert alert-{{ message[0] }}">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    {{ message[1] }}
+                                </div>
+                                {% endfor %}                            
+                                <div id="state">Hello, {{ user }}</div>
+                                <form method="post" id="login-form">
+                                    <h4>Login in</h4>
+                                    <p class="form-text">User name</p>
+                                    <p><input class='side-form form-box' type="text" name="user" id="user"></p>
+                                    <p class="form-text">Password</p>
+                                    <p><input class='side-form form-box' type="password" name="password" id="password"></p>
+                                    <input type="button" class='side-form-button' id="login-button" value='登录'/>
+                                    <input type="button" class='side-form-button' id="register-button" value='注册'/>
+                                </form>
+                            {% else %}
+                                <h4>Login State</h4>
+                                {% for message in flash_messages %}
+                                <div class="alert alert-{{ message[0] }}">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    {{ message[1] }}
+                                </div>
+                                {% endfor %}                        
+                                <div id="state">Hello, {{ user }}</div>
+                                <br/>
+                                <input type="button" class='side-form-button' id="logout-button" value='退出'/>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="aside-content">
+                            <h4>提交博客</h4>
+                            <form method="post" action="/reddit_save_blog" id='form'>
+                                <input type="text" name="blogid" value='{{ blogid }}' hidden>
+                                <textarea name="content" id='content' hidden></textarea>
+                                <input type="button" id="save" class='side-form-button' value="提交"/> 
+                            </form>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <p>Design By Stan</p>
+        </footer>
+
+	    <script src="{{url_for('static',filename='md_editor/jquery.min.js')}}"></script>
+		<script src="{{url_for('static',filename='md_editor/md_editor_edit_again.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/marked.min.js')}}/"></script>
+        <script src="{{url_for('static',filename='md_editor/prettify.min.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/raphael.min.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/underscore.min.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/sequence-diagram.min.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/flowchart.min.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/jquery.flowchart.min.js')}}"></script>
+        <script src="{{url_for('static',filename='md_editor/editormd.js')}}"></script>
+        <div id="content" class="contenttext">
+            <textarea style="display:none;" name="editormd-markdown-doc" id="content"></textarea>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                editormd.markdownToHTML("content", {
+                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                    emoji           : true,
+                    taskList        : true,
+                    tex             : true,  // 默认不解析
+                    flowChart       : true,  // 默认不解析
+                    sequenceDiagram : true,  // 默认不解析
+                    tocm : true,//菜单
+                    tocContainer : "",
+                    tocDropdown   : false
+                });
+
+            })
+        </script>
+
+        <script type="text/javascript">
+            if(window.screen.width<=480)
+            {
+                alert("屏幕尺寸太小，效果极其糟糕，请使用宽度大于768的设备");
+            }
+            else if(window.screen.width<=769)
+            {
+                alert("屏幕尺寸较小，效果不佳，建议使用宽度大于768的设备");
+            }
+        </script>
+        
+	</body>
+
+</html>

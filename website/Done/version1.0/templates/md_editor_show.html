@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="{{url_for('static',filename='md_editor/style.css')}}" />
         <link rel="stylesheet" href="{{url_for('static',filename='md_editor/editormd.preview.css')}}" />
         <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='md_editor/md_editor_show.css')}}">
+        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     </head>
 
     <body>
@@ -30,8 +32,18 @@
             <div class="container">
                 <div class="row">
                     <main class="col-md-12">
+                        <div id="head-message">
+                        <div id="flash-area"></div>
+                    	<input type="text" id="auth" value="{{auth}}" hidden>
+                    	<input type="text" id="user" value="{{user}}" hidden>
+                    	<input type="text" id="authority" value={{authority}} hidden>
+                    	<form action="/reedit" method="post" id="reedit-form">
+                    		<input type="text" name="blogid" value="{{ blogid }}" hidden/>
+                    		<input type="button" id="reedit-submit" value="重新编辑" />
+                    	</form>
+                        </div>
                         <div id="test-editormd-view">
-                           <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>               
+                           <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>
                         </div>
                     </main>
                 </div>
@@ -105,7 +117,27 @@
                 alert("屏幕尺寸较小，效果不佳，建议使用宽度大于768的设备");
             }
         </script>
+        <script type="text/javascript">
+            var flash_message = "<div class='alert alert-danger'><button type='button' class='close' data-dismiss='alert'>&times;</button>没有权限</div>"
 
-        
+            var btn = document.getElementById("reedit-submit");
+
+            btn.onclick = reedit_judge;
+
+            function reedit_judge(){
+                var auth = document.getElementById("auth").value;
+                var user = document.getElementById("user").value;
+                var authority = document.getElementById("authority").value;
+                var form = document.getElementById("reedit-form");
+                var flash_area = document.getElementById("flash-area")
+                if(auth==user || authority=='1'){
+                    form.submit();
+                }
+                else{
+                    flash_area.innerHTML = flash_message;
+                }
+            }
+
+        </script>
     </body>
 </html>

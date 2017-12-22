@@ -120,6 +120,8 @@ class Database :
 		if len(res) :
 			num = res[0][0]
 		if blog_id<=num and num :
+			path = self.get_blog(blog_id)
+			os.remove(path)
 			self.database.execute("delete from blog where id=%s;"%blog_id)
 			self.database.execute("update blog set id=id-1 where id>%s;"%blog_id)
 			self.database.execute("update blog set num = num-1;")
@@ -134,8 +136,12 @@ class Database :
 				break
 		return path
 
-	def change_blog(self, blog_id, content) :
-		self.database.execute("update blog set content='%s' where id=%s;"%(content, blog_id))
+	def check_blog_haver(self,blog_id) :
+		res = list(self.database.execute("select auth from blog where id=%s;"%blog_id))
+		return res[0][0]
+
+	def change_blog(self, blog_id, content, date) :
+		self.database.execute("update blog set content='%s',create_date='%s' where id=%s;"%(content,date, blog_id))
 		self.database.commit()
 
 	def get_blog_number(self) :
