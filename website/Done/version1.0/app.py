@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,Response,session,escape,redirect,url_for
 from Database import Database
 from jinja2 import Template
-from tools import get_content,get_time,save_md
+from tools import get_content,get_time,save_md,fail_message,success_message
 import time
 
 app = Flask(__name__)
@@ -176,59 +176,31 @@ def get_md(blogid) :
 		rep = fi.read()
 	return Response(rep,mimetype='text/markdown')
 
+
 @app.route('/save-blog', methods=['POST',])
 def save_blog() :
-	if 'user' in session and not escape(session['user'])=='stranger' :
-		if time.time()-int(escape(session['time'])) < remember_login_time :
-			content = request.form['content']
-			title = request.form['title']
-			user = escape(session['user'])
-			c = get_content(content)
-			now = get_time()
-			path = save_md(content, user)
-			Database.connect()
-			Database.add_blog(title=title, auth=user, create_date=now, content=c, path=path)
-			Database.close()
-			return render_template('md_editor_edit.html', user=escape(session['user']))
-		else :
-			session['user'] = 'stranger'
-			session['password'] = '12345'
-			return render_template('md_editor_edit.html', user=escape(session['user']))
+	if "time" in session and time.time()-int(escape(session['time'])) < remember_login_time:
+		user = escape(session['user'])
+		content = request.form['content']
+		title = request.form['title']
+		c = get_content(content)
+		now = get_time()
+		path = save_md(content, user)
+		Database.connect()
+		blogid = Database.add_blog(title=title, auth=user, create_date=now, content=c, path=path)
+		Database.close()
+		return redirect('/md-editor/show/'+str(blogid))
+	
 	else :
+		session['user'] = 'stranger'
+		session['password'] = '12345'
 		return render_template('md_editor_edit.html', user='stranger')
+
+
+
 
 @app.route('/login', methods=['POST',])
 def login() :
-	success_message = '''
-	<h4>Login State</h4>
-	{% for message in flash_messages %}
-        <div class="alert alert-{{ message[0] }}">
-        	<button type="button" class="close" data-dismiss="alert">&times;</button>
-        	{{ message[1] }}
-        </div>
-    {% endfor %}
-	<div id='state'>Hello, {{ user }}</div>
-	<br/>
-	<input type='button' class='side-form-button' id='logout-button' value='退出'/>'''
-	fail_message = '''
-							<h4>Login State</h4>
-							{% for message in flash_messages %}
-	                            <div class="alert alert-{{ message[0] }}">
-	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	                            	{{ message[1] }}
-	                            </div>
-	                        {% endfor %}							
-							<div id="state">Hello, {{ user }}</div>
-							<form method="post" id="login-form">
-								<h4>Login in</h4>
-								<p class="form-text">User name</p>
-								<p><input class="side-form form-box" type="text" name="user" id="user"></p>
-								<p class="form-text">Password</p>
-								<p><input class="side-form form-box" type="password" name="password" id="password"></p>
-								<input type="button" class='side-form-button' id="login-button" value='登录'/>
-	                            <input type="button" class='side-form-button' id="register-button" value='注册'/>
-							</form>
-	'''
 	user = request.form['user']
 	password = request.form['password']
 	try :
@@ -248,35 +220,13 @@ def login() :
 		Database.close()
 	finally :
 		Database.close()
+
 @app.route('/logout', methods=['GET',])
 def logout() :
-	fail_message = '''
-							<h4>Login State</h4>
-							{% for message in flash_messages %}
-	                            <div class="alert alert-{{ message[0] }}">
-	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	                            	{{ message[1] }}
-	                            </div>
-	                        {% endfor %}							
-							<div id="state">Hello, {{ user }}</div>
-							<form method="post" id="login-form">
-								<h4>Login in</h4>
-								<p class="form-text">User name</p>
-								<p><input class="side-form form-box" type="text" name="user" id="user"></p>
-								<p class="form-text">Password</p>
-								<p><input class="side-form form-box" type="password" name="password" id="password"></p>
-								<input type="button" class='side-form-button' id="login-button" value='登录'/>
-	                            <input type="button" class='side-form-button' id="register-button" value='注册'/>
-							</form>
-	'''
 	session['user'] = 'stranger'
 	session['password'] = '12345'
 	template = Template(fail_message)
 	return template.render(user='stranger')
-
-@app.errorhandler(404)
-def page(e) :
-	return render_template('wrong.html')
 
 @app.route("/favicon.ico")
 def icon() :
@@ -287,8 +237,8 @@ def icon() :
 @app.route("/root")
 def root() :
 	Database.connect()
-	if 'user' in session and Database.check_user(escape(session['user']), escape(session['password']))==1 :
-		if time.time()-int(escape(session['time'])) < remember_login_time :
+	if "time" in session and time.time()-int(escape(session['time'])) < remember_login_time :
+		if Database.check_user(escape(session['user']), escape(session['password']))==1:
 			user = Database.show_all_user(not_print=True)
 			user_num = len(user)
 			blog = Database.show_all_blog(not_print=True)
@@ -301,6 +251,8 @@ def root() :
 			return "没有权限"
 	else :
 		Database.close()
+		session['user'] = 'stranger'
+		session['password'] = '12345'
 		return "没有权限"
 	
 
@@ -358,36 +310,6 @@ def delete_blog() :
 
 @app.route("/register",methods=['POST',])
 def register() :
-	success_message = '''
-	<h4>Login State</h4>
-	{% for message in flash_messages %}
-        <div class="alert alert-{{ message[0] }}">
-        	<button type="button" class="close" data-dismiss="alert">&times;</button>
-        	{{ message[1] }}
-        </div>
-    {% endfor %}
-	<div id='state'>Hello, {{ user }}</div>
-	<br/>
-	<input type='button' class='side-form-button' id='logout-button' value='退出'/>'''
-	fail_message = '''
-							<h4>Login State</h4>
-							{% for message in flash_messages %}
-	                            <div class="alert alert-{{ message[0] }}">
-	                            	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	                            	{{ message[1] }}
-	                            </div>
-	                        {% endfor %}							
-							<div id="state">Hello, {{ user }}</div>
-							<form method="post" id="login-form">
-								<h4>Login in</h4>
-								<p class="form-text">User name</p>
-								<p><input class="side-form form-box" type="text" name="user" id="user"></p>
-								<p class="form-text">Password</p>
-								<p><input class="side-form form-box" type="password" name="password" id="password"></p>
-								<input type="button" class='side-form-button' id="login-button" value='登录'/>
-	                            <input type="button" class='side-form-button' id="register-button" value='注册'/>
-							</form>
-	'''
 	user = request.form['user']
 	password = request.form['password']
 	try :
@@ -404,14 +326,15 @@ def register() :
 			template = Template(fail_message)
 			return template.render(user='stranger', flash_messages=[('danger', '用户名已存在'),])
 	except Exception as er:
-		print(er)
 		Database.close()
 	finally :
 		Database.close()
+
+
 app.secret_key = '123abc'
 
 if __name__ == '__main__' :
 	try :
-		app.run(host="0.0.0.0",debug=True,port=8000)
+		app.run(host="0.0.0.0",port=8000)
 	except :
 		pass

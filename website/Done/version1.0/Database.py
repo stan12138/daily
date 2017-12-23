@@ -107,6 +107,8 @@ class Database :
 		self.database.execute("update blog set num=num+1;")
 		self.database.commit()
 
+		return blog_id
+
 	def show_all_blog(self,not_print=False) :
 		res = list(self.database.execute("select * from blog;"))
 		if not not_print :
