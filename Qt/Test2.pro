@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         window.cpp \
-    stan_layout.cpp
+    stan_layout.cpp \
+    pad.cpp \
+    widthdialog.cpp
 
 HEADERS += \
         window.h \
-    stan_layout.h
+    stan_layout.h \
+    pad.h \
+    widthdialog.h
 
 FORMS += \
         window.ui

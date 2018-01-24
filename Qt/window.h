@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include<QMouseEvent>
+#include "pad.h"
 
 namespace Ui {
 class Window;
@@ -24,6 +25,25 @@ protected :
     void mouseReleaseEvent(QMouseEvent* e);
     void mouseMoveEvent(QMouseEvent* e);
     void paintEvent(QPaintEvent*);
+    void set_style();
+    void set_layout();
+    void set_menu();
+
+public slots:
+    void get_width(int width) const;
+    void pen_get_color(const QColor& color);
+    void pad_get_color(const QColor& color);
+    void window_get_color(const QColor& color);
+
+private slots:
+    void set_window_color();
+    void set_pad_color();
+    void set_pen_color();
+    void set_pen_width(int width);
+
+    void width_dialog();
+
+    void save_file();
 
 private:
     Ui::Window *ui;
@@ -36,8 +56,17 @@ private:
     QPoint change_old_pos;
     QRect screen;
     bool max_flage;
-    //QIcon max_icon(":/ico/max.svg");
-    //QIcon re_icon(":/ico/re.svg");
+
+    QAction *windowColorAct;
+    QAction *penColorAct;
+    QAction *padColorAct;
+    QAction *penWidthAct;
+
+    Pad *mypad;
+
+    QColor window_color;
+    QColor pad_color;
+    QColor pen_color;
 };
 
 #endif // WINDOW_H
