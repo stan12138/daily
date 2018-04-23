@@ -17,7 +17,7 @@ class Ball
 	{
 		this.x = x;
 		this.y = canvas.height;
-		this.color = ran_color();//`hsla(${360 * Math.random() | 0},80%,60%,1)`;
+		this.color = '#FF8000';//`hsla(${360 * Math.random() | 0},80%,60%,1)`;
 		this.origin_y = canvas.height;
 		this.end_y = 200*Math.random();
 		this.r = 2;
@@ -65,7 +65,7 @@ class Small
 		this.children = [];
 		this.x = x;
 		this.y = y;
-		this.color = ran_color();
+		this.color = '#FF8000';
 	}
 
 	create(num)
@@ -131,25 +131,7 @@ function draw()
 	}
 	else
 	{
-		var len = ball.small_fire.length;
-		var delete_num = 0;
-		//var small = ball.small_fire;
-		for(var i=0; i<len; i++)
-		{
-			var small = ball.small_fire[i]
-			var children = small.children;
-			var len1 = children.length;
-			
-			for(var j=0; j<len1; j++)
-			{
-				children[j].render();
-				delete_num += should_delete(children[j].vx);
-			}
-		}
-		if(delete_num>3000)
-		{
-			ball = new Ball(canvas.width/2);
-		}
+		fire_on();
 
 	}
 
@@ -184,4 +166,30 @@ function should_delete(v)
 {
 	if(Math.min(Math.round(v*255)*2,256)<10) return 1;
 	else return 0;
+}
+
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function fire_on(){
+	var len = ball.small_fire.length;
+	var delete_num = 0;
+	//var small = ball.small_fire;
+	for(var i=0; i<len; i++)
+	{
+		var small = ball.small_fire[i]
+		var children = small.children;
+		var len1 = children.length;
+		
+		for(var j=0; j<len1; j++)
+		{
+			children[j].render();
+			delete_num += should_delete(children[j].vx);
+		}
+	}
+	if(delete_num>3000)
+	{
+		ball = new Ball(canvas.width/2);
+	}
 }

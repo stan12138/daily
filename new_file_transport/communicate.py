@@ -77,13 +77,13 @@ class CommunicateServer :
 				self.recv_try_connect = False
 				self.recv_connect = True
 
-				#self.recv_file = self.recv_server.makefile('rb')
+				self.recv_file = self.recv_server.makefile('rb')
 				print("get server.....")
 			except :
 				self.recv_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 		while self.recv_loop :
-			self.recv_file = self.recv_server.makefile('rb')
+			#self.recv_file = self.recv_server.makefile('rb')
 			content_type = self.recv_file.readline()
 			content_type = content_type.decode('utf-8')
 			content_type = content_type.rstrip('\r\n')
@@ -95,7 +95,7 @@ class CommunicateServer :
 
 
 			data = self.recv_file.read(content_length)
-			self.recv_file.close()
+			#self.recv_file.close()
 			data = self.parse_data(data, content_type)
 
 			if content_type == 'message' :
@@ -106,7 +106,7 @@ class CommunicateServer :
 				print(file_size, filename)
 				with open(filename,'wb') as fi :		#18.4.9 0:05 文件传输出现错误，无法读取足够长度的内容，未知错误出在何处，发送或者接受？
 					for i in range(times*2) :
-						data = self.recv_server.recv(self.recv_size)
+						data = self.recv_file.read(self.recv_size)
 						length += len(data)
 						fi.write(data)
 						print('\r'+str(length), end='')
