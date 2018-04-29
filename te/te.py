@@ -1,5 +1,6 @@
 import numpy as np
 from time import time
+from kde_te import kde_count
 #from numpy import sum, abs, max, zeros, log2, min
 #据称和验证，停止使用属性访问方式可以，对于大规模的循环，可以提升几个百分点的性能
 
@@ -27,11 +28,11 @@ class TE :
 		return self.TE_Discrete(self.s2, self.s1, num)
 
 	def kde_te12(self, r, out_length=0) :
-		return self.TE_Box_KDE(self.s1, self.s2, r, out_length)
-		#return self.TE_KDE_T(self.s1, self.s2, r, out_length)
+		#return self.TE_Box_KDE(self.s1, self.s2, r, out_length)
+		return self.TE_KDE_TC(self.s1, self.s2, r, out_length)
 	def kde_te21(self, r, out_length=0) :
-		return self.TE_Box_KDE(self.s2, self.s1, r, out_length)
-		#return self.TE_KDE_T(self.s2, self.s1, r, out_length)
+		#return self.TE_Box_KDE(self.s2, self.s1, r, out_length)
+		return self.TE_KDE_TC(self.s2, self.s1, r, out_length)
 
 
 
@@ -153,7 +154,7 @@ class TE :
 		p_record = np.zeros([l, 4],dtype=np.float)
 		for i in range(l) :
 			#据分析，差不多一半的时间花在了max上面，另外一半时间花在了np.ufunc.reduce
-			#I don't know how to optimize, maybe CPython?
+			#I don't know how to optimize, maybe Cython?
 			a = r-((record-record[i,:]).__abs__()).max(axis=1)
 			a[max(0,i-out_length):min(i+out_length,l)] = 0
 			p_record[i, 0] = (a>0).sum() #in1injn
@@ -241,7 +242,20 @@ class TE :
 		p_record = p_record[p_record[:, 0]>0, :]
 		return np.sum(np.log2(p_record[:,0]*p_record[:,1]/(p_record[:,2]*p_record[:,3])))/(self.l-1)
 
+	def TE_KDE_TC(self, s1, s2, r, out_length=100) :
+		l = self.l-1
+		record = np.zeros([l, 3], dtype=np.double)
+		record[:, 0] = s2[1:]
+		record[:, 1] = s2[:-1]
+		record[:, 2] = s1[:-1]
 
+		p_record = np.zeros([l, 4],dtype=np.double)
+
+		kde_count(record, p_record, r, out_length)
+		
+		new_p_record = p_record[p_record[:, 0]>0, :]
+
+		return (np.log2(new_p_record[:,0]*new_p_record[:,1]/(new_p_record[:,2]*new_p_record[:,3]))).sum()/(self.l-1)
 
 
 if __name__ == '__main__':
