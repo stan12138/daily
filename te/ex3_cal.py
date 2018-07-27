@@ -40,8 +40,8 @@ for i in range(l) :
 	rc = r*std_c
 	a = TE(heart, chest)
 	b = TE(chest, heart)
-	res1[i] = a.te(method="box_kde", direction="1->2", r=(rh,rc), out_length=100, core_language="python")
-	res2[i] = b.te(method="box_kde", direction="1->2", r=(rc,rh), out_length=100, core_language="python")
+	res1[i] = a.te(method="box_kde", direction="1->2", r=(rh,rc), out_length=100, core_language="python", correction=True)
+	res2[i] = b.te(method="box_kde", direction="1->2", r=(rc,rh), out_length=100, core_language="python", correction=True)
 	print("TE(r=%f): heart->breath = %f, breath->heart = %f"%(rs[i], res1[i], res2[i]))
 print("\n")
 print(time.time()-start)
