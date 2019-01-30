@@ -1,10 +1,11 @@
 import numpy as np
 from time import time
-from kde_te import kde_count
+from .box_kde import te_box_kde, mi_box_kde
 #from numpy import sum, abs, max, zeros, log2, min
 #据称和验证，停止使用属性访问方式可以，对于大规模的循环，可以提升几个百分点的性能
 
 __all__ = ["TE",]
+np.set_printoptions(threshold=np.nan)
 
 class TE :
 	def __init__(self, series1, series2) :
@@ -15,24 +16,32 @@ class TE :
 
 
 	#起初是考虑到便捷，将一些方法做了不太必要的封装，之后为了保持一致性，就都封装了一下，其实没必要
-	def kde_mi(self, r, out_length=0) :
-		return self.MI_Box_KDE(self.s1, self.s2, r, out_length)
+	def mi(self, method="discrete", out_length=0, num=20, r=0, core_language="c") :
+		if method == "discrete" :
+			return self.MI_Discrete(self.s1, self.s2, num)
+		elif method == "box_kde" :
+			if core_language == "c" :
+				return self.MI_Box_KDE_C(self.s1, self.s2, r, out_length)
+			elif core_language == "python" :
+				return self.MI_Box_KDE(self.s1, self.s2, r, out_length)
 
-	def discrete_mi(self, num=20) :
-		return self.MI_Discrete(self.s1, self.s2, num)
-
-	def discrete_te12(self, num=20) :
-		return self.TE_Discrete(self.s1, self.s2, num)
-
-	def discrete_te21(self, num=20) :
-		return self.TE_Discrete(self.s2, self.s1, num)
-
-	def kde_te12(self, r, out_length=0) :
-		#return self.TE_Box_KDE(self.s1, self.s2, r, out_length)
-		return self.TE_KDE_TC(self.s1, self.s2, r, out_length)
-	def kde_te21(self, r, out_length=0) :
-		#return self.TE_Box_KDE(self.s2, self.s1, r, out_length)
-		return self.TE_KDE_TC(self.s2, self.s1, r, out_length)
+	def te(self, method="discrete", direction="1->2", num=20, r=0, out_length=0, core_language = "c", correction=False) :
+		if method == "discrete" :
+			if direction == "1->2" :
+				return self.TE_Discrete(self.s1, self.s2, num)
+			elif direction == "2->1" :
+				return self.TE_Discrete(self.s2, self.s1, num)
+		elif method == "box_kde" :
+			if direction == "1->2" :
+				if core_language == "c" :
+					return self.TE_Box_KDE_C(self.s1, self.s2, r, out_length)
+				elif core_language == "python" :
+					return self.TE_Box_KDE(self.s1, self.s2, r, correction, out_length)
+			elif direction == "2->1" :
+				if core_language == "c" :
+					return self.TE_Box_KDE_C(self.s2, self.s1, r, out_length)
+				elif core_language == "python" :
+					return self.TE_Box_KDE(self.s2, self.s1, r, correction, out_length)
 
 
 
@@ -94,6 +103,20 @@ class TE :
 
 		return np.sum(p[:, 0]*np.log2(p[:, 0]*self.l/(p[:, 1]*p[:, 2])))/self.l
 
+	def MI_Box_KDE_C(self, s1, s2, r, out_length) :
+		record = np.zeros([self.l, 2], dtype=np.double)
+		record[:, 0] = s1
+		record[:, 1] = s2
+
+		p = np.zeros([self.l, 3],dtype=np.double)
+		
+		mi_box_kde(record, p, r, out_length)
+
+		p = p[p[:,0]>0, :]
+
+		return np.sum(p[:, 0]*np.log2(p[:, 0]*self.l/(p[:, 1]*p[:, 2])))/self.l
+
+
 
 	def TE_Discrete(self, s1, s2, num=20) :
 		'''
@@ -144,33 +167,87 @@ class TE :
 		#计算，注意分子分母都应该除掉self.l的平方，刚好抵消
 		return np.sum(hist_xn1xnyn*np.log2(h1/h2))/(self.l-1)
 
-	def TE_Box_KDE(self, s1, s2, r, out_length=100) :
+	def TE_Box_KDE(self, s1, s2, r, correction=False, out_length=100) :
 		l = self.l-1
 		record = np.zeros([l, 3])
 		record[:, 0] = s2[1:]
 		record[:, 1] = s2[:-1]
 		record[:, 2] = s1[:-1]
+		#print("this is record")
+		#print(record)
+
 
 		p_record = np.zeros([l, 4],dtype=np.float)
+		if len(r)==1 :
+			for i in range(l) :
+				#据分析，差不多一半的时间花在了max上面，另外一半时间花在了np.ufunc.reduce
+				#I don't know how to optimize, maybe Cython?
+				a = r-((record-record[i,:]).__abs__()).max(axis=1)
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 0] = (a>=0).sum() #in1injn
+				a = r-(record[:,1]-record[i, 1]).__abs__()
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 1] = (a>=0).sum() #in
+				a = r-((record[:,1:]-record[i,1:]).__abs__()).max(axis=1)
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 2] = (a>=0).sum() #injn
+				a = r-((record[:,:-1]-record[i,:-1]).__abs__()).max(axis=1)
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 3] = (a>=0).sum() #in1in
+		else :
+			rs1 = r[0]
+			rs2 = r[1]
+			for i in range(l) :
+				#done! 18.5.5 10:06 检验完毕，与matlb对比一致
+				#据分析，差不多一半的时间花在了max上面，另外一半时间花在了np.ufunc.reduce
+				#I don't know how to optimize, maybe Cython?
+				a = np.min([[rs2,rs2,rs1]]-((record-record[i,:]).__abs__()),axis=1)
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 0] = (a>=0).sum() #in1injn
+				a = rs2-(record[:,1]-record[i, 1]).__abs__()
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 1] = (a>=0).sum() #in
+				a = np.min([[rs2,rs1]]-((record[:,1:]-record[i,1:]).__abs__()),axis=1)
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 2] = (a>=0).sum() #injn
+				a = np.min([[rs2,rs2]]-((record[:,:-1]-record[i,:-1]).__abs__()),axis=1)
+				a[max(0,i-out_length+1):min(i+out_length,l)] = -1
+				p_record[i, 3] = (a>=0).sum() #in1in		
+		#print(p_record)
+		new_p_record = p_record[p_record[:, 0]>0, :]
+
+		#误差修正部分
+		if correction :
+			pass
+			#巨麻烦无比，我怕是完不成了
+		'''
 		for i in range(l) :
-			#据分析，差不多一半的时间花在了max上面，另外一半时间花在了np.ufunc.reduce
-			#I don't know how to optimize, maybe Cython?
-			a = r-((record-record[i,:]).__abs__()).max(axis=1)
-			a[max(0,i-out_length):min(i+out_length,l)] = 0
-			p_record[i, 0] = (a>0).sum() #in1injn
-			a = r-(record[:,1]-record[i, 1]).__abs__()
-			a[max(0,i-out_length):min(i+out_length,l)] = 0
-			p_record[i, 1] = (a>0).sum() #in
-			a = r-((record[:,1:]-record[i,1:]).__abs__()).max(axis=1)
-			a[max(0,i-out_length):min(i+out_length,l)] = 0
-			p_record[i, 2] = (a>0).sum() #injn
-			a = r-((record[:,:-1]-record[i,:-1]).__abs__()).max(axis=1)
-			a[max(0,i-out_length):min(i+out_length,l)] = 0
-			p_record[i, 3] = (a>0).sum() #in1in
+			#if p_record[i, 0]>0 :
+				print(i)
+				print(p_record[i, :])
+		'''
+		#print(r)
+		#print(new_p_record)
+		#print("above is new_p_record")
+
+		return (np.log2(new_p_record[:,0]*new_p_record[:,1]/(new_p_record[:,2]*new_p_record[:,3]))).sum()/(self.l-1)
+
+
+	def TE_Box_KDE_C(self, s1, s2, r, out_length=100) :
+		l = self.l-1
+		record = np.zeros([l, 3], dtype=np.double)
+		record[:, 0] = s2[1:]
+		record[:, 1] = s2[:-1]
+		record[:, 2] = s1[:-1]
+
+		p_record = np.zeros([l, 4],dtype=np.double)
+
+		te_box_kde(record, p_record, r, out_length)
 		
 		new_p_record = p_record[p_record[:, 0]>0, :]
 
 		return (np.log2(new_p_record[:,0]*new_p_record[:,1]/(new_p_record[:,2]*new_p_record[:,3]))).sum()/(self.l-1)
+
 
 	def TE_KDE_T(self, s1, s2, r, out_length=100) :
 		'''
@@ -242,43 +319,28 @@ class TE :
 		p_record = p_record[p_record[:, 0]>0, :]
 		return np.sum(np.log2(p_record[:,0]*p_record[:,1]/(p_record[:,2]*p_record[:,3])))/(self.l-1)
 
-	def TE_KDE_TC(self, s1, s2, r, out_length=100) :
+
+
+	def TE_Box_KDE_WTF(self, s1, s2, r, out_length) :
 		l = self.l-1
-		record = np.zeros([l, 3], dtype=np.double)
+		record = np.zeros([l, 3])
 		record[:, 0] = s2[1:]
 		record[:, 1] = s2[:-1]
 		record[:, 2] = s1[:-1]
 
-		p_record = np.zeros([l, 4],dtype=np.double)
 
-		kde_count(record, p_record, r, out_length)
-		
-		new_p_record = p_record[p_record[:, 0]>0, :]
+		'''
+		numpy在进行直方图统计的时候，参数bins指定的是格子的数目，可以考虑一下，其实当我们试图做一个直方图
+		统计的时候，我们可以有两种选择，指定格子数目，或者指定格子宽度，两种方式并无法直接转换，因为
+		同样地格子数是有多种可能的宽度的
+		那么numpy在指定格子数目的情况下，是如何实现的呢？对于一个数据序列，数据点的序号是这样得到的
+		int((a-min(a))/(max(a)/bins))， 然后还必须处理a[np.where(a==bins)] = bins-1
+		当我们需要一个指定格子宽度的直方图函数的时候，我们可以这样做
+		首先必须计算总的格子数bins = ceil((max(a)-min(a))/width)，向上取整的意思
+		然后每个点int((a-min(a))/width)， 然后还必须处理a[np.where(a==bins)] = bins-1
+		'''
 
-		return (np.log2(new_p_record[:,0]*new_p_record[:,1]/(new_p_record[:,2]*new_p_record[:,3]))).sum()/(self.l-1)
-
-
-if __name__ == '__main__':
-
-	import pandas as pd
-	import numpy as np
-	import matplotlib.pyplot as plt
-
-	origin_data = pd.read_csv('dataset.csv', names=['days', 'predator', 'prey'])
-
-	data_array = origin_data.values
-
-	prey = data_array[:,1]
-	predator = data_array[:,2]
-
-	x = list(range(5,50))
-	y = list(range(5,50))
-	for i in range(len(x)) :
-		a = Discrete_TE(prey, predator, num=x[i])
-		y[i] = a.mi
-	plt.plot(x,y,'r-o')
-	plt.show()
-
+		hxn = np.histogram(record[:,1], bins=num)[0]
 
 
 
